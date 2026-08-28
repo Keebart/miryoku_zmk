@@ -115,7 +115,16 @@ For composite keyboards (keyboards with a separate controller), enter the keyboa
 
 For split composite keyboards (keyboards with a separate controller on each side), enter the keyboard side name, e.g. ~corne_left~, ~corne_right~, ~cradio_left~, ~cradio_right~.  To build both sides in the same run, enter both keyboard side names separated by a comma, e.g. ~corne_left,corne_right~, ~cradio_left,cradio_right~.
 
-Also use to specify optional non-keyboard shields, e.g. ~nice_view~. To combine shields, separate with space, e.g. ~nice_view_adapter nice_view~, ~corne_left nice_view_adapter nice_view~. For multiple builds of combined shields in the same run, use both comma and space separators, e.g. ~corne_left nice_view_adapter nice_view,corne_right nice_view_adapter nice_view~.
+Use [[#extra-shield][extra_shield]] for optional non-keyboard shields.
+
+
+****** extra_shield
+
+Specifies optional non-keyboard ZMK shields without changing which board or keyboard shield Miryoku uses to select its keymap and configuration.
+
+For an onboard controller keyboard with a display shield, leave [[#shield][shield]] as ~default~ and enter the display shield here, e.g. ~nice_view~.
+
+For a composite keyboard, enter the keyboard in [[#shield][shield]] and accessories here, e.g. use ~corne_left~ as the shield and ~nice_view_adapter nice_view~ as the extra shield. Separate multiple accessory shields with spaces. For multiple builds in the same run, separate extra-shield combinations with commas.
 
 
 ***** Miryoku Alternative Layout and Mapping Options

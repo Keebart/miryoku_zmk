@@ -12,6 +12,10 @@ on:
         description: 'shield'
         required: false
         default: 'default'
+      extra_shield:
+        description: 'optional non-keyboard shield'
+        required: false
+        default: 'default'
       alphas:
         description: 'alphas'
         required: false
@@ -50,6 +54,7 @@ jobs:
     outputs:
       board: ${{ steps.process-inputs.outputs.board }}
       shield: ${{ steps.process-inputs.outputs.shield }}
+      extra_shield: ${{ steps.process-inputs.outputs.extra_shield }}
       alphas: ${{ steps.process-inputs.outputs.alphas }}
       nav: ${{ steps.process-inputs.outputs.nav }}
       layers: ${{ steps.process-inputs.outputs.layers }}
@@ -69,6 +74,7 @@ jobs:
           }
           set-output "board" "${{ github.event.inputs.board }}"
           set-output "shield" "${{ github.event.inputs.shield }}"
+          set-output "extra_shield" "${{ github.event.inputs.extra_shield }}"
           set-output "alphas" "${{ github.event.inputs.alphas }}"
           set-output "nav" "${{ github.event.inputs.nav }}"
           set-output "layers" "${{ github.event.inputs.layers }}"
@@ -84,6 +90,7 @@ jobs:
     with:
       board: ${{ needs.process-inputs.outputs.board }}
       shield: ${{ needs.process-inputs.outputs.shield }}
+      extra_shield: ${{ needs.process-inputs.outputs.extra_shield }}
       alphas: ${{ needs.process-inputs.outputs.alphas }}
       nav: ${{ needs.process-inputs.outputs.nav }}
       layers: ${{ needs.process-inputs.outputs.layers }}

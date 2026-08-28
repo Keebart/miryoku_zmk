@@ -11,6 +11,9 @@ on:
       shield:
         type: string
         default: '["default"]'
+      extra_shield:
+        type: string
+        default: '["default"]'
       alphas:
         type: string
         default: '["default"]'
@@ -56,6 +59,7 @@ jobs:
       matrix:
         board: ${{ fromJSON(inputs.board) }}
         shield: ${{ fromJSON(inputs.shield) }}
+        extra_shield: ${{ fromJSON(inputs.extra_shield) }}
         alphas: ${{ fromJSON(inputs.alphas) }}
         extra: ${{ fromJSON(inputs.extra) }}
         tap: ${{ fromJSON(inputs.tap) }}
@@ -83,12 +87,22 @@ jobs:
 
           if [ -n "${{ matrix.shield }}" -a "${{ matrix.shield }}" != "default" ]
           then
-            SHIELD_ARG="-DSHIELD=\"${{ matrix.shield }}\""
+            shields="${{ matrix.shield }}"
             shield=`echo ${{ matrix.shield }} | cut -d ' ' -f 1`
             keyboard="$shield"
           else
             keyboard=${{ matrix.board }}
             shield=""
+          fi
+          if [ -n "${{ matrix.extra_shield }}" -a "${{ matrix.extra_shield }}" != "default" ]
+          then
+            shields="$shields ${{ matrix.extra_shield }}"
+            extra_shields="${{ matrix.extra_shield }}"
+          fi
+          shields=`echo "$shields" | xargs`
+          if [ -n "$shields" ]
+          then
+            SHIELD_ARG="-DSHIELD=\"$shields\""
           fi
           echo "shield_arg=$SHIELD_ARG" >> $GITHUB_OUTPUT
           keyboard_split="$keyboard"
@@ -107,6 +121,10 @@ jobs:
           if [ -n "${{ matrix.shield }}" -a "${{ matrix.shield }}" != 'default' ]
           then
             run_name="$run_name ${{ matrix.shield }}"
+          fi
+          if [ -n "${{ matrix.extra_shield }}" -a "${{ matrix.extra_shield }}" != 'default' ]
+          then
+            run_name="$run_name ${{ matrix.extra_shield }}"
           fi
           run_name="$run_name ${{ matrix.board }}"
 
@@ -165,6 +183,7 @@ jobs:
           echo "
           board: '${{ matrix.board }}'
           shield: '${{ matrix.shield }}'
+          extra_shield: '${{ matrix.extra_shield }}'
           alphas: '${{ matrix.alphas }}'
           extra: '${{ matrix.extra }}'
           tap: '${{ matrix.tap }}'
@@ -187,6 +206,11 @@ jobs:
           else
             outboards="boards/$keyboard_base"
           fi
+          for extra_shield in $extra_shields
+          do
+            extra_shield_base=`echo "$extra_shield" | sed -e 's/_\(left\|right\|dongle\)//' -e 's/@.*//'`
+            outboards="$outboards shields/$extra_shield_base"
+          done
           for outboard in $outboards
           do
             outboard_repository=''
@@ -372,4 +396,3 @@ jobs:
         with:
           name: ${{ steps.main.outputs.run_name }}
           path: ${{ steps.main.outputs.artifact_dir }}
-
