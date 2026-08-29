@@ -1,6 +1,23 @@
 
-name: 'Build Example corne_choc_pro'
-on: workflow_dispatch
+name: 'Build Corne Choc Pro BT'
+on:
+  workflow_dispatch:
+    inputs:
+      alphas:
+        description: 'Alpha layout'
+        required: true
+        default: 'QWERTY'
+        type: choice
+        options:
+          - 'AZERTY'
+          - 'BEAKL15'
+          - 'Colemak'
+          - 'ColemakDHK'
+          - 'Dvorak'
+          - 'Halmak'
+          - 'QWERTY'
+          - 'QWERTZ'
+          - 'Workman'
 jobs:
   build:
     uses: ./.github/workflows/main.yml
@@ -8,3 +25,4 @@ jobs:
     with:
       board: '["corne_choc_pro_left","corne_choc_pro_right"]'
       extra_shield: '["sharp_mip"]'
+      alphas: ${{ format('["{0}"]', inputs.alphas) }}
